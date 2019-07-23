@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/brunomorello/smanagement/issues"
   },
-  "homepage": "https://github.com/brunomorello/smanagement#readme"
+  "homepage": "https://github.com/brunomorello/smanagement#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
