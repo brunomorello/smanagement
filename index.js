@@ -1,11 +1,5 @@
-let express = require('express');
-let app = express();
+let app = require('./config/custom-express.js')();
 
 app.listen(3000, () => {
     console.log('Server running on port 3000');    
 });
-
-app.get('/test', (req, res) => {
-    console.log('req received!!');
-    res.send('ok');
-})
