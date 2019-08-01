@@ -15,22 +15,34 @@ nodemon index.js
 ##### Docker
 
 Pull MySQL Image
-```docker pull mariadb/server:10.3```
+```bash
+docker pull mariadb/server:10.3
+```
 
 Create a MySQL Container with some default values
-```docker run --name localhostlab -e MYSQL_ROOT_PASSWORD=dqm50vnc -p 3306 -d mariadb/server:10.3```
+```bash
+docker run --name localhostlab -e MYSQL_ROOT_PASSWORD=dqm50vnc -p 3306 -d mariadb/server:10.3
+```
 
 Basic Commands
-```docker restart localhostlab```
-```docker stop localhostlab```
-```docker start localhostlab```
-```docker logs localhostlab```
+```bash
+docker restart localhostlab
+docker stop localhostlab
+docker start localhostlab
+docker logs localhostlab
+```
 
 Gets Docker Port to connect
-```docker port localhostlab```
+```bash
+docker port localhostlab
+```
 
 Open Bash for this container
-```docker exec -it localhostlab bash```
+```bash
+docker exec -it localhostlab bash
+```
 
 Find the IP address that has been assigned to the container
-```docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' localhostlab```
+```bash
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' localhostlab
+```
