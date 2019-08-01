@@ -1,3 +1,6 @@
+import { MetricDao } from "../dao/MetricDao";
+import { ConnectionFactory } from "../dao/ConnectionFactory";
+
 module.exports = (app) => {
     app.get('/metrics', (req, res) => {
        
@@ -9,8 +12,21 @@ module.exports = (app) => {
 
         let metric = req.body;
 
-        console.log(`post received ${metric}`);
-        res.send('ok');
+        metric.id = '222222';
+        metric.status = 'active';
+        metric.creation_date = new Date();
+
+        let connection = new ConnectionFactory();
+
+        let metricDao = new MetricDao(connection);
+
+        metricDao.insert(metric, (error, result) => {
+            console.log(`post received ${metric.text}`);
+            console.log('metric created');
+            res.json(metric);
+        });
+
+        //res.send(metric);
 
     });
 }
