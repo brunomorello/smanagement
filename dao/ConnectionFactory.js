@@ -1,14 +1,13 @@
 let mysql = require('mysql');
 
-export class ConnectionFactory {
+exports.createDBConnection = () => {
 
-    get connection() {
-        return mysql.createConnection({
-            host: '0.0.0.0',
-            user: 'root',
-            password: 'dqm50vnc',
-            database: 'smanagement'
-        });
-    }
+    return mysql.createConnection({
+        host: '0.0.0.0',
+        port: '32769',
+        user: 'root',
+        password: 'dqm50vnc',
+        database: 'smanagement'
+    });
 
 }

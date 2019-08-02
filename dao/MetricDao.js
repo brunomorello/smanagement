@@ -1,7 +1,18 @@
-export class MetricDao {
+class MetricDao {
  
-    constructor(connection) {
-        this._connection = connection;
+    constructor() {        
+
+        let mysqlConnection = require('./connectionFactory');
+
+        this._connection = mysqlConnection.createDBConnection();
+        
+        this._connection.connect((err) => {
+           
+            if (err) throw err;
+
+            console.log(`connected!`);            
+
+        });
     }
 
     insert(metric, callback) {
@@ -17,3 +28,5 @@ export class MetricDao {
     }
 
 }
+
+module.exports = new MetricDao;
