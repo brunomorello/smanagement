@@ -1,6 +1,3 @@
-import { MetricDao } from "../dao/MetricDao";
-import { ConnectionFactory } from "../dao/ConnectionFactory";
-
 module.exports = (app) => {
     app.get('/metrics', (req, res) => {
        
@@ -16,17 +13,17 @@ module.exports = (app) => {
         metric.status = 'active';
         metric.creation_date = new Date();
 
-        let connection = new ConnectionFactory();
+        const MetricDao = require('../dao/MetricDao');
 
-        let metricDao = new MetricDao(connection);
+        MetricDao.insert(metric, (error, result) => {
+            
+            if (error) throw error;
 
-        metricDao.insert(metric, (error, result) => {
-            console.log(`post received ${metric.text}`);
-            console.log('metric created');
+            console.log(`Executed: ${JSON.stringify(result)}`);            
+
             res.json(metric);
-        });
 
-        //res.send(metric);
+        });
 
     });
 }
