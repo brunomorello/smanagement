@@ -2,7 +2,7 @@ let express = require('express');
 let consign = require('consign');
 let bodyParser = require('body-parser');
 
-module.exports = function () {
+module.exports = () => {
     
     let app = express();
 
@@ -11,7 +11,6 @@ module.exports = function () {
 
     consign()
         .include('routes')
-        .then('dao')
         .into(app);
 
     return app;
