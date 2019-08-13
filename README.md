@@ -9,6 +9,8 @@ npm install -g nodemon
 npm install --save consign
 npm install --save body-parser
 npm install --save mysql
+npm install --save express-validator
+npm install --save uuid
 
 nodemon index.js
 
@@ -21,7 +23,7 @@ docker pull mariadb/server:10.3
 
 Create a MySQL Container with some default values
 ```bash
-docker run --name localhostlab -e MYSQL_ROOT_PASSWORD=dqm50vnc -p 3306 -d mariadb/server:10.3
+docker run --name localhostlab -e MYSQL_ROOT_PASSWORD=dqm50vnc -p 3306:3306 -d mariadb/server:10.3
 ```
 
 Basic Commands
