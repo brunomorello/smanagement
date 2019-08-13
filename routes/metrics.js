@@ -1,3 +1,5 @@
+const { check, validationResult } = require('express-validator');
+
 module.exports = (app) => {
     app.get('/metrics', (req, res) => {
        
@@ -5,11 +7,26 @@ module.exports = (app) => {
         res.send('ok');
     });
 
-    app.post('/metrics/metric', (req, res) => {  
+    app.post('/metrics/metric', [
 
-        let metric = req.body;
+        check('name').not().isEmpty()
+            .withMessage('Metrics must have a Name'),
+        check('target').isInt()
+            .withMessage('Target must be an Integer')
 
-        metric.id = '222222';
+    ], (req, res) => {  
+
+        const errors = validationResult(req);
+
+        if(!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+
+        let metric = req.body;    
+        
+        // Imports UUID Lib
+        const uuidv4 = require('uuid/v4');
+        
+        // Generating UUID
+        metric.id = uuidv4();
         metric.status = 'active';
         metric.creation_date = new Date();
 
@@ -17,10 +34,15 @@ module.exports = (app) => {
 
         MetricDao.insert(metric, (error, result) => {
             
-            if (error) throw error;
+            if (error) {
+                res.status(400).send(error);
+                throw error;
+            }
 
-            console.log(`Executed: ${JSON.stringify(result)}`);            
+            console.log(`Executed: ${JSON.stringify(result)}`);
 
+            res.location('/metrics/metric/' + metric.id);
+            res.status(201);
             res.json(metric);
 
         });
