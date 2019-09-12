@@ -14,6 +14,7 @@ class MessageOutbound {
                 throw err;
             }
 
+            // Create Channel and send Message
             connection.createChannel((err, channel) => {
 
                 if(err) {
@@ -29,7 +30,12 @@ class MessageOutbound {
                 console.log(` [x] Sent ${message}`);
                 
 
-            })
+            });
+
+            // Close connection
+            setTimeout(() => {
+                connection.close();
+            }, 500);
 
         });
 
