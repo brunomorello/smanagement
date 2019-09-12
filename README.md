@@ -48,3 +48,8 @@ Find the IP address that has been assigned to the container
 ```bash
 docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' localhostlab
 ```
+
+Install amqplib lib for RabbitMQ
+```
+npm install --save amqplib
+```
