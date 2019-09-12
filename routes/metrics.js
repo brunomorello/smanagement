@@ -1,13 +1,15 @@
 const { check, validationResult } = require('express-validator');
 const MetricDao = require('../dao/MetricDao');
 const MessageOutbound = require('../outbound/MessageOutbound');
+const MessageConsumer = require('../outbound/MessageConsumer');
 
 module.exports = (app) => 
 {
     app.get('/metrics', (req, res) => {
-       
-        console.log('requisition for metrics received');
+               
+        res.status(200);
         res.send('ok');
+
     });
 
     app.delete('/metrics/metric/:id', (req, res) => {
@@ -96,5 +98,10 @@ module.exports = (app) =>
 
     });
 
+    app.patch('/metrics/', (req, res) => {
+
+        res.json(MessageConsumer.getMessage());
+
+    });
 
 }
