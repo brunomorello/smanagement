@@ -1,5 +1,6 @@
 const { check, validationResult } = require('express-validator');
 const MetricDao = require('../dao/MetricDao');
+const MessageOutbound = require('../outbound/MessageOutbound');
 
 module.exports = (app) => 
 {
@@ -91,5 +92,9 @@ module.exports = (app) =>
 
         });
 
+        MessageOutbound.send(JSON.stringify(metric));
+
     });
+
+
 }
