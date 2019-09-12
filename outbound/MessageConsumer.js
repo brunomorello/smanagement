@@ -2,6 +2,7 @@ class MessageConsumer {
 
     constructor() {
         this._amqp = require('amqplib/callback_api');
+        this._msg;
     }
 
     getMessage() {
@@ -26,7 +27,8 @@ class MessageConsumer {
 
                 channel.consume(queue, (msg) => {
                     
-                    console.log(` [x] Received ${msg}`);
+                    console.log(` [x] Received ${msg.toString()}`);
+                    this._msg = msg;
                     
                 }, {
                     noAck: true
@@ -35,6 +37,8 @@ class MessageConsumer {
             })
 
         });
+
+        return this._msg;
 
     }
 
