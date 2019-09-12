@@ -90,7 +90,24 @@ module.exports = (app) =>
 
             res.location('/metrics/metric/' + metric.id);
             res.status(201);
-            res.json(metric);
+
+            let response = {
+                "metric": metric,
+                "links": [
+                    {
+                        "href": `/metrics/metric/${metric.id}`,
+                        "rel": "update",
+                        "type": "PUT"
+                    },
+                    {
+                        "href": `/metrics/metric/${metric.id}`,
+                        "rel": "inactive",
+                        "type": "DELETE"
+                    }
+                ]
+            };
+
+            res.json(response);
 
         });
 
