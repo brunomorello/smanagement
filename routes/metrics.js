@@ -7,8 +7,48 @@ module.exports = (app) =>
 {
     app.get('/metrics/metric/:id', (req, res) => {               
 
-        res.status(200);
-        res.send('ok');
+        let metricID = req.params.id;
+
+        MetricDao.get(metricID, (error, results, fields) => {
+
+            if(error) {
+                res.status(500)
+                    .send(error);
+                throw error;                    
+            }
+
+            let metric = results;
+
+            //console.log(`results: ${JSON.stringify(results)}`);       
+            //console.log(`fields: ${JSON.stringify(fields)}`);       
+
+            res.status(200);
+
+            let response = {
+                "metric": metric,
+                "links": [
+                    {
+                        "href": `/metrics/metric/${metric.id}`,
+                        "rel": "update",
+                        "type": "PUT"
+                    },
+                    {
+                        "href": `/metrics/metric/${metric.id}`,
+                        "rel": "inactive",
+                        "type": "DELETE"
+                    },
+                    {
+                        "href": `/metrics/metric/${metric.id}`,
+                        "rel": "get",
+                        "type": "GET"
+                    }
+                ]
+            };
+
+            res.json(response);
+
+
+        });
 
     });
 
