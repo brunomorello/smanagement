@@ -5,8 +5,8 @@ const MessageConsumer = require('../outbound/MessageConsumer');
 
 module.exports = (app) => 
 {
-    app.get('/metrics', (req, res) => {
-               
+    app.get('/metrics/metric/:id', (req, res) => {               
+
         res.status(200);
         res.send('ok');
 
@@ -29,7 +29,19 @@ module.exports = (app) =>
             console.log(`Executed: ${JSON.stringify(result)}`);
 
             res.status(204);
-            res.json(metric);            
+
+            let response = {
+                "metric": metric,
+                "links": [
+                    {
+                        "href": `/metrics/metric/${metric.id}`,
+                        "rel": "get",
+                        "type": "GET"
+                    }
+                ]
+            };
+
+            res.json(response);
 
         })
 
@@ -50,7 +62,24 @@ module.exports = (app) =>
             console.log(`Executed: ${JSON.stringify(result)}`);
 
             res.status(200);
-            res.json(metric);
+
+            let response = {
+                "metric": metric,
+                "links": [                    
+                    {
+                        "href": `/metrics/metric/${metric.id}`,
+                        "rel": "inactive",
+                        "type": "DELETE"
+                    },
+                    {
+                        "href": `/metrics/metric/${metric.id}`,
+                        "rel": "get",
+                        "type": "GET"
+                    }                    
+                ]
+            };
+
+            res.json(response);
 
         });
 
@@ -103,7 +132,12 @@ module.exports = (app) =>
                         "href": `/metrics/metric/${metric.id}`,
                         "rel": "inactive",
                         "type": "DELETE"
-                    }
+                    },
+                    {
+                        "href": `/metrics/metric/${metric.id}`,
+                        "rel": "get",
+                        "type": "GET"
+                    }                    
                 ]
             };
 
