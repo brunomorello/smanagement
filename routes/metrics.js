@@ -2,9 +2,30 @@ const { check, validationResult } = require('express-validator');
 const MetricDao = require('../dao/MetricDao');
 const MessageOutbound = require('../outbound/MessageOutbound');
 const MessageConsumer = require('../outbound/MessageConsumer');
+const ServiceNowAPI = require('../services/REST/ServiceNowAPI');
 
 module.exports = (app) => 
 {
+
+    app.get('/snow', (req, res) => {
+
+        let snowQueryParam = "/api/now/table/incident?sysparm_fields=sys_id,number,assignment_group&sysparm_display_value=true&sysparm_query=active=true^assignment_group=b9797de1db633300723e146139961999";
+
+        ServiceNowAPI.get(snowQueryParam, (error, reqApi, resApi, obj) => {
+
+            if(error) {
+                res.status(500)
+                    .send(error);
+                throw error;
+            }
+
+            res.status(200);
+            res.json(obj);
+
+        });
+
+    });
+
     app.get('/metrics/metric/:id', (req, res) => {               
 
         let metricID = req.params.id;
