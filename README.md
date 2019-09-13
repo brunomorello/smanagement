@@ -57,5 +57,6 @@ npm install --save amqplib
 Install REST lib to consume REST APIs
 ```
 npm install --save restify
+npm install --save restify-clients 
 ```
 // TODO use RabbitMQ as container
