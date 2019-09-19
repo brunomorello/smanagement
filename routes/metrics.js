@@ -4,6 +4,7 @@ const MessageOutbound = require('../outbound/MessageOutbound');
 const MessageConsumer = require('../outbound/MessageConsumer');
 const ServiceNowAPI = require('../services/REST/ServiceNowAPI');
 
+
 module.exports = (app) => 
 {
 
@@ -206,6 +207,7 @@ module.exports = (app) =>
 
         });
 
+        // Post this metric on RabbitMQ 
         MessageOutbound.send(JSON.stringify(metric));
 
     });
