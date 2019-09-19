@@ -60,3 +60,8 @@ npm install --save restify
 npm install --save restify-clients 
 ```
 // TODO use RabbitMQ as container
+
+Install SOAP lib to consume Web Services SOAP
+```
+npm install --save soap
+```
