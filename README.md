@@ -65,3 +65,8 @@ Install SOAP lib to consume Web Services SOAP
 ```
 npm install --save soap
 ```
+
+POST Files using curl
+```
+curl -X POST http://localhost:3000/upload --data-binary @file.jpg -H "Content-type: application/octet-stream"
+```
