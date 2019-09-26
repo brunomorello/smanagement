@@ -1,4 +1,4 @@
-// usage:  node fileReader.js file_name
+// usage:  node fileReader.js file_name file
 
 let fs = require('fs');
 
