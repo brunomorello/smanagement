@@ -49,6 +49,11 @@ Find the IP address that has been assigned to the container
 docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' localhostlab
 ```
 
+Create rabbitmq container
+```
+docker run -d --hostname localhost --name localhost-mq -p 5672:5672 -d rabbitmq:3-alpine
+```
+
 Install amqplib lib for RabbitMQ
 ```
 npm install --save amqplib
@@ -59,7 +64,6 @@ Install REST lib to consume REST APIs
 npm install --save restify
 npm install --save restify-clients 
 ```
-// TODO use RabbitMQ as container
 
 Install SOAP lib to consume Web Services SOAP
 ```
@@ -78,5 +82,5 @@ docker run --name localhost-memcache -p 11211:11211 -d memcached:1.5.17-alpine m
 
 Install memcached lib client
 ```
-npm instll --save memcached
+npm install --save memcached
 ```
