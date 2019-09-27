@@ -3,7 +3,7 @@ const MetricDao = require('../dao/MetricDao');
 const MessageOutbound = require('../outbound/MessageOutbound');
 const MessageConsumer = require('../outbound/MessageConsumer');
 const ServiceNowAPI = require('../services/REST/ServiceNowAPI');
-
+const MemcachedClient = require('../services/cache/MemcachedClient');
 
 module.exports = (app) => 
 {
@@ -22,6 +22,25 @@ module.exports = (app) =>
 
             res.status(200);
             res.json(obj);
+
+        });
+
+    });
+
+    app.get('/metrics', (req, res) => {
+
+        //MemcachedClient.set('test1', {"id": "22222222"});
+
+        MemcachedClient.get('test1', (err, result) => {
+
+            if(err) {
+                res.status(500)
+                    .send(err);
+                throw err;
+            }
+
+            res.status(200)
+                .json(result);
 
         });
 
