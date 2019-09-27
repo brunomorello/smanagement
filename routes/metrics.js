@@ -69,17 +69,17 @@ module.exports = (app) =>
                 "metric": metric,
                 "links": [
                     {
-                        "href": `/metrics/metric/${metric.id}`,
+                        "href": `/metrics/metric/${metricID}`,
                         "rel": "update",
                         "type": "PUT"
                     },
                     {
-                        "href": `/metrics/metric/${metric.id}`,
+                        "href": `/metrics/metric/${metricID}`,
                         "rel": "inactive",
                         "type": "DELETE"
                     },
                     {
-                        "href": `/metrics/metric/${metric.id}`,
+                        "href": `/metrics/metric/${metricID}`,
                         "rel": "get",
                         "type": "GET"
                     }
