@@ -2,7 +2,7 @@ class FileStream {
 
     constructor () {
 
-        let fs = require('fs');
+        this._fs = require('fs');
 
     }
 
