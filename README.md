@@ -70,3 +70,13 @@ POST Files using curl
 ```
 curl -X POST http://localhost:3000/upload --data-binary @file.jpg -H "Content-type: application/octet-stream"
 ```
+
+Create memcached docker container
+```
+docker run --name localhost-memcache -d memcached memcached -m 64 -p 11211:11211
+```
+
+Install memcached lib client
+```
+npm instll --save memcached
+```
