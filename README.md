@@ -73,7 +73,7 @@ curl -X POST http://localhost:3000/upload --data-binary @file.jpg -H "Content-ty
 
 Create memcached docker container
 ```
-docker run --name localhost-memcache -d memcached memcached -m 64 -p 11211:11211
+docker run --name localhost-memcache -p 11211:11211 -d memcached:1.5.17-alpine memcached -m 64
 ```
 
 Install memcached lib client
