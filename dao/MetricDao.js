@@ -1,10 +1,16 @@
 class MetricDao {
  
-    constructor() {        
+    constructor() {
 
-        let mysqlConnection = require('./connectionFactory');
+        let mysql = require('mysql');
 
-        this._connection = mysqlConnection.createDBConnection();
+        this._connection = mysql.createConnection({
+            host: 'localhost',
+            port: '3306',
+            user: 'root',
+            password: 'dqm50vnc',
+            database: 'smanagement'
+        });
         
         this._connection.connect((err) => {
            
