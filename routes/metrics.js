@@ -4,6 +4,7 @@ const MessageOutbound = require('../outbound/MessageOutbound');
 const MessageConsumer = require('../outbound/MessageConsumer');
 const ServiceNowAPI = require('../services/REST/ServiceNowAPI');
 const MemcachedClient = require('../services/cache/MemcachedClient');
+const logger = require('../config/logger');
 
 module.exports = (app) => 
 {
@@ -21,8 +22,9 @@ module.exports = (app) =>
                 throw err;
             } 
 
-            // MISS - No Cache Found - Query SN API
-            if(!result) {                                                       
+            if(!result) {            
+                
+                logger.info(`MISS - No Cache Found - Query SN API`);
 
                 ServiceNowAPI.get(snowQueryParam, (error, reqApi, resApi, obj) => {
 
@@ -42,8 +44,9 @@ module.exports = (app) =>
                 });
 
             } else {
-                
-                //HIT - Cache Found
+
+                logger.info(`HIT - Cache Found`);
+
                 res.status(200);
                 res.json(result);
 
@@ -67,8 +70,8 @@ module.exports = (app) =>
 
             let metric = results;
 
-            //console.log(`results: ${JSON.stringify(results)}`);       
-            //console.log(`fields: ${JSON.stringify(fields)}`);       
+            logger.info(`results: ${JSON.stringify(results)}`);       
+            logger.info(`fields: ${JSON.stringify(fields)}`);       
 
             res.status(200);
 
@@ -114,7 +117,7 @@ module.exports = (app) =>
                 throw error;
             }
             
-            console.log(`Executed: ${JSON.stringify(result)}`);
+            logger.info(`Executed: ${JSON.stringify(result)}`);
 
             res.status(204);
 
@@ -147,7 +150,7 @@ module.exports = (app) =>
                 throw error;
             }
 
-            console.log(`Executed: ${JSON.stringify(result)}`);
+            logger.info(`Executed: ${JSON.stringify(result)}`);
 
             res.status(200);
 
@@ -203,7 +206,7 @@ module.exports = (app) =>
                 throw error;
             }
 
-            console.log(`Executed: ${JSON.stringify(result)}`);
+            logger.info(`Executed: ${JSON.stringify(result)}`);
 
             res.location('/metrics/metric/' + metric.id);
             res.status(201);
