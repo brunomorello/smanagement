@@ -12,35 +12,42 @@ module.exports = (app) =>
 
         let snowQueryParam = "/api/now/table/incident?sysparm_fields=sys_id,number,assignment_group&sysparm_display_value=true&sysparm_query=active=true^assignment_group=b9797de1db633300723e146139961999";
 
-        ServiceNowAPI.get(snowQueryParam, (error, reqApi, resApi, obj) => {
+        // Before Call API Check if data exists on Cache
+        MemcachedClient.get('snowOpenTickets', (err, result) => {
 
-            if(error) {
-                res.status(500)
-                    .send(error);
-                throw error;
-            }
-
-            res.status(200);
-            res.json(obj);
-
-        });
-
-    });
-
-    app.get('/metrics', (req, res) => {
-
-        //MemcachedClient.set('test1', {"id": "22222222"});
-
-        MemcachedClient.get('test1', (err, result) => {
-
-            if(err) {
+            if (err) {
                 res.status(500)
                     .send(err);
                 throw err;
-            }
+            } 
 
-            res.status(200)
-                .json(result);
+            // MISS - No Cache Found - Query SN API
+            if(!result) {                                                       
+
+                ServiceNowAPI.get(snowQueryParam, (error, reqApi, resApi, obj) => {
+
+                    if (error) {
+                        res.status(500)
+                            .send(error);
+                        throw error;
+                    }
+
+                    MemcachedClient.set('snowOpenTickets', obj, 15000, (errMemcachedSet) => {
+                        throw errMemcachedSet
+                    });
+
+                    res.status(200);
+                    res.json(obj);
+
+                });
+
+            } else {
+                
+                //HIT - Cache Found
+                res.status(200);
+                res.json(result);
+
+            }
 
         });
 
