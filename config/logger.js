@@ -12,10 +12,14 @@ module.exports = winston.createLogger({
     transports: [
         new winston.transports.File({
             filename: 'logs/error.log',
-            level: 'error'
+            level: 'error',
+            maxsize: 5000,
+            maxFiles: 10
         }),
         new winston.transports.File({
-            filename: 'logs/combined.log'
+            filename: 'logs/combined.log',
+            maxsize: 5000,
+            maxFiles: 10
         })
     ]
 });
