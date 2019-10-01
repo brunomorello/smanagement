@@ -84,3 +84,8 @@ Install memcached lib client
 ```
 npm install --save memcached
 ```
+
+Install winston logs
+```
+npm i --save winston
+```
