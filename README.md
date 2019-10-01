@@ -89,3 +89,8 @@ Install winston logs
 ```
 npm i --save winston
 ```
+
+Install morgan logger middleware
+```
+npm i --save morgan
+```
