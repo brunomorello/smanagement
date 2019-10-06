@@ -13,6 +13,7 @@ if(cluster.isMaster) {
         console.log(`cluster using PID ${worker.process.pid}`);
     });
 
+    // if any node is down start it again
     cluster.on('exit', worker => {
         console.log(`clusted ${worker.process.pid} disconnected`);
         cluster.fork();        
