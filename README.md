@@ -71,3 +71,9 @@ Build Process using docker-compose
 ```docker-compose up -d```
 *To get logs* ```docker-compose logs```
 *To stop containers* ```docker-compose down```
+
+Considerations:
+
+- Use Dockerfile to prepare the build e.g. node and mysql
+- Use docker-compose to complement settings for each image
+- Run docker-compose build to guarantee changes were 'compiled'
