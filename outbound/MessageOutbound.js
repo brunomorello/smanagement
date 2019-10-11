@@ -8,7 +8,7 @@ class MessageOutbound {
 
     send(message) {
 
-        this._amqp.connect('amqp://localhost', (err, connection) => {
+        this._amqp.connect('amqp://smanagement_api_mq', (err, connection) => {
 
             if(err) {
                 throw err;
