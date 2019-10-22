@@ -9,50 +9,62 @@ const logger = require('../config/logger');
 module.exports = (app) => 
 {
 
-    app.get('/snow', (req, res) => {
+    // app.get('/snow', (req, res) => {
 
-        let snowQueryParam = "/api/now/table/incident?sysparm_fields=sys_id,number,assignment_group&sysparm_display_value=true&sysparm_query=active=true^assignment_group=b9797de1db633300723e146139961999";
+    //     let snowQueryParam = "/api/now/table/incident?sysparm_fields=sys_id,number,assignment_group&sysparm_display_value=true&sysparm_query=active=true^assignment_group=b9797de1db633300723e146139961999";
 
-        // Before Call API Check if data exists on Cache
-        MemcachedClient.get('snowOpenTickets', (err, result) => {
+    //     // Before Call API Check if data exists on Cache
+    //     MemcachedClient.get('snowOpenTickets', (err, result) => {
 
-            if (err) {
-                res.status(500)
-                    .send(err);
-                throw err;
-            } 
+    //         if (err) {
+    //             res.status(500)
+    //                 .send(err);
+    //             throw err;
+    //         } 
 
-            if(!result) {            
+    //         if(!result) {            
                 
-                logger.info(`MISS - No Cache Found - Query SN API`);
+    //             logger.info(`MISS - No Cache Found - Query SN API`);
 
-                ServiceNowAPI.get(snowQueryParam, (error, reqApi, resApi, obj) => {
+    //             ServiceNowAPI.get(snowQueryParam, (error, reqApi, resApi, obj) => {
 
-                    if (error) {
-                        res.status(500)
-                            .send(error);
-                        throw error;
-                    }
+    //                 if (error) {
+    //                     res.status(500)
+    //                         .send(error);
+    //                     throw error;
+    //                 }
 
-                    MemcachedClient.set('snowOpenTickets', obj, 15000, (errMemcachedSet) => {
-                        throw errMemcachedSet
-                    });
+    //                 MemcachedClient.set('snowOpenTickets', obj, 15000, (errMemcachedSet) => {
+    //                     throw errMemcachedSet
+    //                 });
 
-                    res.status(200);
-                    res.json(obj);
+    //                 res.status(200);
+    //                 res.json(obj);
 
-                });
+    //             });
 
-            } else {
+    //         } else {
 
-                logger.info(`HIT - Cache Found`);
+    //             logger.info(`HIT - Cache Found`);
 
-                res.status(200);
-                res.json(result);
+    //             res.status(200);
+    //             res.json(result);
 
-            }
+    //         }
 
-        });
+    //     });
+
+    // });
+
+    app.get('/metrics', (req, res) => {
+
+        MetricDao.selectAll('metric')
+            .then(metricList => {
+
+                res.status(200)
+                    .send(metricList.rows);
+
+            });
 
     });
 
@@ -105,11 +117,7 @@ module.exports = (app) =>
 
     app.delete('/metrics/metric/:id', (req, res) => {
 
-        let metric = req.body;
-        metric.id = req.params.id;
-        metric.status = 'inactive';
-
-        MetricDao.inactive(metric, (error, result) => {
+        MetricDao.get(req.params.id, (error, result) => {
 
             if(error) {
                 res.status(500)
@@ -117,60 +125,87 @@ module.exports = (app) =>
                 throw error;
             }
             
-            logger.info(`Executed: ${JSON.stringify(result)}`);
+            let metric = result;
+            metric._id = req.params.id;
+            metric.status = 'inactive';
+            metric.updated_date = new Date().toISOString();
 
-            res.status(204);
+            MetricDao.insert(metric, (error, result) => {
 
-            let response = {
-                "metric": metric,
-                "links": [
-                    {
-                        "href": `/metrics/metric/${metric.id}`,
-                        "rel": "get",
-                        "type": "GET"
-                    }
-                ]
-            };
+                if(error) {
+                    res.status(500)
+                    .send(error);
+                    throw error;
+                }
 
-            res.json(response);
+                logger.info(`Executed: ${JSON.stringify(result)}`);
 
-        })
+                res.status(204);
+
+                let response = {
+                    "metric": metric,
+                    "links": [
+                        {
+                            "href": `/metrics/metric/${metric.id}`,
+                            "rel": "get",
+                            "type": "GET"
+                        }
+                    ]
+                };
+
+                res.json(response);
+
+            });
+
+        });
 
     });
 
     app.put('/metrics/metric/:id', (req, res) => {
 
-        let metric = req.body;
-        metric.id = req.params.id;
-
-        MetricDao.update(metric, (error, result) => {
+        MetricDao.get(req.params.id, (error, result) => {
 
             if (error) {
                 res.status(500).send(error);
-                throw error;
+                throw error;    
             }
 
-            logger.info(`Executed: ${JSON.stringify(result)}`);
+            let metric = result;
+            metric._id = req.params.id;
+            metric.name = req.body.name;
+            metric.target = req.body.target;
+            metric.updated_date = new Date().toISOString();
 
-            res.status(200);
-
-            let response = {
-                "metric": metric,
-                "links": [                    
-                    {
-                        "href": `/metrics/metric/${metric.id}`,
-                        "rel": "inactive",
-                        "type": "DELETE"
-                    },
-                    {
-                        "href": `/metrics/metric/${metric.id}`,
-                        "rel": "get",
-                        "type": "GET"
-                    }                    
-                ]
-            };
-
-            res.json(response);
+            MetricDao.insert(metric, (error, result) => {
+    
+                if (error) {
+                    res.status(500).send(error);
+                    throw error;
+                }
+    
+                logger.info(`Executed: ${JSON.stringify(result)}`);
+    
+                res.status(200);
+    
+                let response = {
+                    "metric": metric,
+                    "links": [                    
+                        {
+                            "href": `/metrics/metric/${metric.id}`,
+                            "rel": "inactive",
+                            "type": "DELETE"
+                        },
+                        {
+                            "href": `/metrics/metric/${metric.id}`,
+                            "rel": "get",
+                            "type": "GET"
+                        }                    
+                    ]
+                };
+    
+                res.json(response);
+    
+            });
 
         });
 
@@ -195,9 +230,10 @@ module.exports = (app) =>
         const uuidv4 = require('uuid/v4');
         
         // Generating UUID
-        metric.id = uuidv4();
+        metric._id = 'metric:' + uuidv4();
         metric.status = 'active';
-        metric.creation_date = new Date();
+        metric.creation_date = new Date().toISOString();
+        metric.updated_date = new Date().toISOString();
 
         MetricDao.insert(metric, (error, result) => {
             
@@ -215,17 +251,17 @@ module.exports = (app) =>
                 "metric": metric,
                 "links": [
                     {
-                        "href": `/metrics/metric/${metric.id}`,
+                        "href": `/metrics/metric/${metric._id}`,
                         "rel": "update",
                         "type": "PUT"
                     },
                     {
-                        "href": `/metrics/metric/${metric.id}`,
+                        "href": `/metrics/metric/${metric._id}`,
                         "rel": "inactive",
                         "type": "DELETE"
                     },
                     {
-                        "href": `/metrics/metric/${metric.id}`,
+                        "href": `/metrics/metric/${metric._id}`,
                         "rel": "get",
                         "type": "GET"
                     }                    
@@ -237,7 +273,7 @@ module.exports = (app) =>
         });
 
         // Post this metric on RabbitMQ 
-        MessageOutbound.send(JSON.stringify(metric));
+        //MessageOutbound.send(JSON.stringify(metric));
 
     });
 
