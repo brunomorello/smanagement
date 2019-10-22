@@ -92,6 +92,10 @@ A Node REST API using microservices
 
 ```npm i --save morgan```
 
+### Install IBM Cloudant Database
+
+```npm i --save @cloudant/cloudant```
+
 ### Build Process using docker-compose
 
 ```docker-compose build```
