@@ -11,14 +11,14 @@ exports.createDBConnection = () => {
 
 
     let cloudant = new Cloudant({
-        url: CLOUDANT_URL,
+        url: 'https://05cfc43d-1c86-4ae5-bbf9-a9ffb079f4ae-bluemix.cloudantnosqldb.appdomain.cloud',
         plugins: {
             iamauth: {
-                iamApiKey: CLOUDANT_IAMKEY
+                iamApiKey: 'iG-1m5wiHQfQz-OAp91bOFCzmiDJ3v2bt9g1MMtWkI6O'
             }
         }
     });
 
-   return cloudant.db.use(CLOUDANT_DB_INSTANCE);
+    return cloudant.db.use('smanagement-api');
 
 };
