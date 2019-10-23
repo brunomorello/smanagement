@@ -9,11 +9,11 @@ module.exports = () => {
     
     let app = express();
 
-    let accessLogStream = fs.createWriteStream(path.join(__dirname, '../logs/combined.log'), {flags: 'a' });
+    //let accessLogStream = fs.createWriteStream(path.join(__dirname, '../logs/combined.log'), {flags: 'a' });
 
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
-    app.use(morgan('combined', { stream: accessLogStream }));
+    //app.use(morgan('combined', { stream: accessLogStream }));
 
     consign()
         .include('routes')
