@@ -48,6 +48,14 @@ data:
 EOF
 )
 
+# Show the file that is about to be executed
+echo ""
+echo "$SECRETS" > $API_SECRETS_FILE
+echo "CREATING SECRETS:"
+echo "cat $API_SECRETS_FILE"
+cat $API_SECRETS_FILE
+echo ""
+
 # Execute the file
 echo "KUBERNETES COMMAND:"
 echo "kubectl apply -f $API_SECRETS_FILE"
