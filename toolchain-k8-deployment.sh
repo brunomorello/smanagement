@@ -70,49 +70,49 @@ DEPLOYMENT=$(cat <<EOF''
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: $NAME
+  name: smanagement-api-toolchain
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: $NAME
+        app: smanagement-api-toolchain
     spec:
       containers:
-        - name: $NAME
-            image: $IMAGE
+        - name: smanagement-api-toolchain
+            image: us.icr.io/bmo_dev/smanagement-api-delivery-pipeline:9
             imagePullPolicy: IfNotPresent
             ports:
-            - containerPort: $PORT
+            - containerPort: 3000
             env:
-                - name: CLOUDANT_URL
+              - name: CLOUDANT_URL
                 valueFrom:
-                    secretKeyRef:
-                        name: api-secret
-                        key: cloudant_url
-                - name: CLOUDANT_IAMKEY
+                  secretKeyRef:
+                      name: api-secret
+                      key: cloudant_url
+              - name: CLOUDANT_IAMKEY
                 valueFrom:
-                    secretKeyRef:
-                        name: api-secret
-                        key: cloudant_iamkey
-                - name: CLOUDANT_DB_INSTANCE
+                  secretKeyRef:
+                      name: api-secret
+                      key: cloudant_iamkey
+              - name: CLOUDANT_DB_INSTANCE
                 valueFrom:
-                    secretKeyRef:
-                        name: api-secret
-                        key: cloudant_db_instance
+                  secretKeyRef:
+                      name: api-secret
+                      key: cloudant_db_instance
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: $NAME
+  name: smanagement-api-toolchain
   labels:
-    app: $NAME
+    app: smanagement-api-toolchain
 spec:
   type: NodePort
   ports:
-    - port: $PORT
+    - port: 3000
   selector:
-    app: $NAME
+    app: smanagement-api-toolchain
 EOF
 )
 
