@@ -83,23 +83,23 @@ spec:
             image: us.icr.io/bmo_dev/smanagement-api-delivery-pipeline:9
             imagePullPolicy: IfNotPresent
             ports:
-            - containerPort: 3000
+              - containerPort: 3000
             env:
               - name: CLOUDANT_URL
                 valueFrom:
                   secretKeyRef:
-                      name: api-secret
-                      key: cloudant_url
+                    name: api-secret
+                    key: cloudant_url
               - name: CLOUDANT_IAMKEY
                 valueFrom:
                   secretKeyRef:
-                      name: api-secret
-                      key: cloudant_iamkey
+                    name: api-secret
+                    key: cloudant_iamkey
               - name: CLOUDANT_DB_INSTANCE
                 valueFrom:
                   secretKeyRef:
-                      name: api-secret
-                      key: cloudant_db_instance
+                    name: api-secret
+                    key: cloudant_db_instance
 ---
 apiVersion: v1
 kind: Service
