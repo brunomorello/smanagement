@@ -111,4 +111,4 @@ A Node REST API using microservices
 - Use Dockerfile to prepare the build e.g. node and mysql
 - Use docker-compose to complement settings for each image
 - Run docker-compose build to guarantee changes were 'compiled'
-- Testing IBM Cloud K8s Cluster
+- Testing IBM Cloud K8s Cluster. Custom toolchain tip ```https://developer.ibm.com/tutorials/custom-toolchain-with-devops/```
